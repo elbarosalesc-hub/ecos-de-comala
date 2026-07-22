@@ -1,0 +1,29 @@
+name: Preparar juego
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  descomprimir:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Descomprimir el juego
+        run: unzip -o ecos-de-comala-cloudflare.zip
+
+      - name: Guardar carpetas
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add app db drizzle public worker
+          git add package.json package-lock.json vite.config.ts tsconfig.json
+          git add next.config.ts postcss.config.mjs eslint.config.mjs
+          git add drizzle.config.ts README.md .gitignore
+          git commit -m "Organizar proyecto para Cloudflare"
+          git push
